@@ -1,31 +1,53 @@
-document.getElementById('lookup-btn').addEventListener('click', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    const lookupBtn = document.getElementById('lookup-btn');
+    const userIdInput = document.getElementById('user-id');
+    
+    // Handle button click
+    lookupBtn.addEventListener('click', handleLookup);
+    
+    // Handle Enter key press
+    userIdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleLookup();
+        }
+    });
+});
+
+async function handleLookup() {
     const userId = document.getElementById('user-id').value.trim();
     const resultDiv = document.getElementById('result');
     const errorDiv = document.getElementById('error');
+    const loader = document.getElementById('loader');
     
     // Clear previous results
     resultDiv.classList.add('hidden');
     errorDiv.classList.add('hidden');
+    errorDiv.textContent = '';
     
     if (!userId) {
         showError('Please enter a Discord User ID');
         return;
     }
     
+    // Show loader
+    loader.classList.remove('hidden');
+    
     try {
-        const response = await fetch(`/api/lookup?id=${userId}`);
+        const response = await fetch(`/api/lookup?id=${encodeURIComponent(userId)}`);
+        const data = await response.json();
         
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to fetch user data');
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to fetch user data');
         }
         
-        const userData = await response.json();
-        displayUserData(userData);
+        displayUserData(data.data);
     } catch (error) {
         showError(error.message);
+    } finally {
+        // Hide loader
+        loader.classList.add('hidden');
     }
-});
+}
 
 function displayUserData(user) {
     const resultDiv = document.getElementById('result');
@@ -39,8 +61,8 @@ function displayUserData(user) {
     document.getElementById('avatar').src = avatarUrl;
     
     // Set username and discriminator
-    document.getElementById('username').textContent = user.username;
-    document.getElementById('discriminator').textContent = `#${user.discriminator}`;
+    document.getElementById('username').textContent = user.username || 'Unknown';
+    document.getElementById('discriminator').textContent = user.discriminator ? `#${user.discriminator}` : '';
     
     // Set other details
     document.getElementById('user-id-display').textContent = user.id;
@@ -59,7 +81,4 @@ function showError(message) {
     const errorDiv = document.getElementById('error');
     errorDiv.textContent = message;
     errorDiv.classList.remove('hidden');
-    
-    const resultDiv = document.getElementById('result');
-    resultDiv.classList.add('hidden');
 }
