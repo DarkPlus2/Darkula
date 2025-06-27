@@ -14,9 +14,16 @@
             <input type="text" id="user-id" placeholder="Enter Discord User ID" required>
             <button id="lookup-btn">Lookup</button>
         </div>
+        
+        <div id="loader" class="hidden">
+            <div class="loader-spinner"></div>
+        </div>
+        
+        <div id="error" class="hidden"></div>
+        
         <div id="result" class="hidden">
             <div class="profile-header">
-                <img id="avatar" src="" alt="Avatar">
+                <img id="avatar" src="" alt="Avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                 <div class="profile-info">
                     <h2 id="username">Username</h2>
                     <p id="discriminator">#0000</p>
@@ -26,10 +33,29 @@
                 <p><strong>ID:</strong> <span id="user-id-display"></span></p>
                 <p><strong>Account Created:</strong> <span id="creation-date"></span></p>
                 <p><strong>Public Flags:</strong> <span id="public-flags"></span></p>
+                <p><strong>Bot:</strong> <span id="is-bot">No</span></p>
+            </div>
+            
+            <div class="badges" id="badges">
+                <!-- Badges will be inserted here dynamically -->
             </div>
         </div>
-        <div id="error" class="hidden"></div>
+        
+        <div class="instructions">
+            <h3>How to get a Discord User ID:</h3>
+            <ol>
+                <li>Open Discord settings</li>
+                <li>Go to <strong>Appearance</strong> → Enable <strong>Developer Mode</strong></li>
+                <li>Right-click any user and select <strong>Copy ID</strong></li>
+            </ol>
+        </div>
     </div>
+    
+    <footer>
+        <p>This tool uses Discord's API to fetch public profile information</p>
+        <p>Not affiliated with Discord, Inc.</p>
+    </footer>
+    
     <script src="script.js"></script>
 </body>
 </html>
