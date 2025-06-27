@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Profile Lookup</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Profile Lookup</h1>
+        <div class="search-box">
+            <input type="text" id="user-id" placeholder="Enter Discord User ID" required>
+            <button id="lookup-btn">Lookup</button>
+        </div>
+        <div id="result" class="hidden">
+            <div class="profile-header">
+                <img id="avatar" src="" alt="Avatar">
+                <div class="profile-info">
+                    <h2 id="username">Username</h2>
+                    <p id="discriminator">#0000</p>
+                </div>
+            </div>
+            <div class="profile-details">
+                <p><strong>ID:</strong> <span id="user-id-display"></span></p>
+                <p><strong>Account Created:</strong> <span id="creation-date"></span></p>
+                <p><strong>Public Flags:</strong> <span id="public-flags"></span></p>
+            </div>
+        </div>
+        <div id="error" class="hidden"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
