@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIC TAC TOE MEGA ULTIMATE HYPER ULTRA+</title>
+    <title>🪐 TIC TAC TOE MEGA ULTIMATE HYPER ULTRA+ 🪐</title>
     
-    <!-- Google Fonts -->
+    <!-- Quantum Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Audiowide&family=Press+Start+2P&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
-    <link rel="stylesheet" href="hyper-ultra-plus.css">
+    <!-- Hyper CSS -->
+    <link rel="stylesheet" href="style.css">
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❎</text></svg>">
     
     <!-- Meta Tags -->
     <meta name="theme-color" content="#0f0526">
-    <meta name="description" content="The most advanced Tic Tac Toe game in the universe">
+    <meta name="description" content="The most advanced Tic Tac Toe experience in the multiverse">
+    <meta property="og:image" content="https://example.com/tic-tac-toe-preview.jpg">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="hyper-ultra-plus.css" as="style">
+    <link rel="preload" href="hyper-ultra-plus.js" as="script">
 </head>
 <body>
     <!-- Cosmic Background -->
@@ -25,28 +33,36 @@
     <!-- Main Game Container -->
     <div class="game-container">
         <!-- Holographic Title -->
-        <h1 class="title">
-            <span class="title-x">TIC</span>
-            <span class="title-o">TAC</span>
-            <span class="title-x">TOE</span>
-            <span class="ultimate">MEGA ULTIMATE HYPER ULTRA+</span>
-        </h1>
+        <div class="title-container">
+            <h1 class="title">
+                <span class="title-x">TIC</span>
+                <span class="title-o">TAC</span>
+                <span class="title-x">TOE</span>
+                <span class="ultimate">MEGA ULTIMATE HYPER ULTRA+</span>
+            </h1>
+            <div class="version-badge">v5.0</div>
+        </div>
         
         <!-- Quantum Scoreboard -->
         <div class="scoreboard">
             <div class="player-score x-score">
                 <div class="player-icon x-icon">X</div>
                 <div class="score" id="score-x">0</div>
+                <div class="player-type" id="player-x-type">HUMAN</div>
             </div>
             <div class="vs-circle">VS</div>
             <div class="player-score o-score">
                 <div class="player-icon o-icon">O</div>
                 <div class="score" id="score-o">0</div>
+                <div class="player-type" id="player-o-type">AI</div>
             </div>
         </div>
 
         <!-- Neural Network Status Display -->
-        <div class="status" id="status">X'S TURN</div>
+        <div class="status-container">
+            <div class="status" id="status">X'S TURN</div>
+            <div class="move-counter" id="move-counter">MOVE: 0</div>
+        </div>
         
         <!-- Holographic Game Board -->
         <div class="board" id="board">
@@ -82,6 +98,13 @@
                         <option value="hard">GOD MODE</option>
                     </select>
                 </div>
+                <div class="setting-group">
+                    <label for="sound-toggle">SOUND</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="sound-toggle" checked>
+                        <span class="slider"></span>
+                    </div>
+                </div>
             </div>
             
             <!-- Action Buttons -->
@@ -94,6 +117,10 @@
                     <span class="btn-text">RESET SCORES</span>
                     <span class="btn-icon">♻</span>
                 </button>
+                <button class="btn btn-undo" id="undo-move">
+                    <span class="btn-text">UNDO</span>
+                    <span class="btn-icon">↩</span>
+                </button>
             </div>
         </div>
     </div>
@@ -105,8 +132,153 @@
     <audio id="sound-x" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"></audio>
     <audio id="sound-o" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
     <audio id="sound-win" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+    <audio id="sound-draw" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-neutral-game-notification-951.mp3"></audio>
+    <audio id="sound-reset" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-quick-jump-arcade-game-239.mp3"></audio>
     
+    <!-- JavaScript -->
+    <script src="script.js" defer></script>
     
-    <script src="script.js"></script>
+    <!-- Service Worker for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+    
+    <!-- Web Worker for Lag-Free AI -->
+    <script>
+        // Inline worker for maximum performance
+        const aiWorkerScript = `
+            const WIN_MASKS = [0b111000000, 0b000111000, 0b000000111, 0b100100100, 0b010010010, 0b001001001, 0b100010001, 0b001010100];
+            
+            self.onmessage = function(e) {
+                const { gameState, currentPlayer, difficulty } = e.data;
+                let move;
+                
+                // Difficulty-based AI
+                switch(difficulty) {
+                    case 'easy':
+                        move = getRandomMove(gameState);
+                        break;
+                    case 'medium':
+                        move = Math.random() < 0.7 ? getSmartMove(gameState, currentPlayer) : getRandomMove(gameState);
+                        break;
+                    case 'hard':
+                        move = getBestMove(gameState, currentPlayer);
+                        break;
+                }
+                
+                self.postMessage(move);
+            };
+
+            function getRandomMove(state) {
+                const empty = state.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+                return empty.length ? empty[Math.floor(Math.random() * empty.length)] : null;
+            }
+
+            function getSmartMove(state, player) {
+                // Check for immediate win
+                for (let i = 0; i < WIN_MASKS.length; i++) {
+                    const mask = WIN_MASKS[i];
+                    const playerMask = state.reduce((m, cell, idx) => 
+                        m | (cell === player ? 1 << (8 - idx) : 0), 0);
+                    
+                    if ((playerMask & mask) === mask) {
+                        const move = 8 - Math.log2(mask & ~playerMask);
+                        if (move >= 0 && !state[move]) return move;
+                    }
+                }
+                
+                // Block opponent
+                const opponent = player === 'X' ? 'O' : 'X';
+                for (let i = 0; i < WIN_MASKS.length; i++) {
+                    const mask = WIN_MASKS[i];
+                    const opponentMask = state.reduce((m, cell, idx) => 
+                        m | (cell === opponent ? 1 << (8 - idx) : 0), 0);
+                    
+                    if ((opponentMask & mask) === mask) {
+                        const move = 8 - Math.log2(mask & ~opponentMask);
+                        if (move >= 0 && !state[move]) return move;
+                    }
+                }
+                
+                // Center or corners
+                if (!state[4]) return 4;
+                const corners = [0, 2, 6, 8].filter(i => !state[i]);
+                if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
+                
+                // Random move as fallback
+                return getRandomMove(state);
+            }
+
+            function getBestMove(state, player) {
+                // Minimax implementation
+                const opponent = player === 'X' ? 'O' : 'X';
+                
+                function minimax(s, depth, isMax) {
+                    const winner = checkWinner(s);
+                    if (winner === player) return 10 - depth;
+                    if (winner === opponent) return depth - 10;
+                    if (!s.includes('')) return 0;
+                    
+                    if (isMax) {
+                        let best = -Infinity;
+                        for (let i = 0; i < s.length; i++) {
+                            if (s[i] === '') {
+                                s[i] = player;
+                                best = Math.max(best, minimax(s, depth + 1, false));
+                                s[i] = '';
+                            }
+                        }
+                        return best;
+                    } else {
+                        let best = Infinity;
+                        for (let i = 0; i < s.length; i++) {
+                            if (s[i] === '') {
+                                s[i] = opponent;
+                                best = Math.min(best, minimax(s, depth + 1, true));
+                                s[i] = '';
+                            }
+                        }
+                        return best;
+                    }
+                }
+                
+                let bestScore = -Infinity;
+                let bestMove = null;
+                
+                for (let i = 0; i < state.length; i++) {
+                    if (state[i] === '') {
+                        state[i] = player;
+                        const score = minimax(state, 0, false);
+                        state[i] = '';
+                        
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = i;
+                        }
+                    }
+                }
+                
+                return bestMove;
+            }
+
+            function checkWinner(s) {
+                const xMask = s.reduce((m, cell, idx) => m | (cell === 'X' ? 1 << (8 - idx) : 0), 0);
+                const oMask = s.reduce((m, cell, idx) => m | (cell === 'O' ? 1 << (8 - idx) : 0), 0);
+                
+                for (const mask of WIN_MASKS) {
+                    if ((xMask & mask) === mask) return 'X';
+                    if ((oMask & mask) === mask) return 'O';
+                }
+                return null;
+            }
+        `;
+        
+        const blob = new Blob([aiWorkerScript], { type: 'application/javascript' });
+        const aiWorker = new Worker(URL.createObjectURL(blob));
+    </script>
 </body>
-</html>
+    </html>
