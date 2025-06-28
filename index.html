@@ -106,50 +106,7 @@
     <audio id="sound-o" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
     <audio id="sound-win" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
     
-    <!-- JavaScript -->
-    <script src="hyper-ultra-plus.js"></script>
     
-    <!-- Web Worker for Lag-Free AI -->
-    <script>
-        // Inline worker for maximum performance
-        const aiWorkerScript = `
-            const WIN_MASKS = [0b111000000, 0b000111000, 0b000000111, 0b100100100, 0b010010010, 0b001001001, 0b100010001, 0b001010100];
-            
-            self.onmessage = function(e) {
-                const { gameState, currentPlayer, difficulty } = e.data;
-                
-                // Bitmask optimization
-                const opponent = currentPlayer === 'X' ? 'O' : 'X';
-                const playerMask = gameState.reduce((mask, cell, idx) => 
-                    mask | (cell === currentPlayer ? 1 << (8 - idx) : 0), 0);
-                const opponentMask = gameState.reduce((mask, cell, idx) => 
-                    mask | (cell === opponent ? 1 << (8 - idx) : 0), 0);
-                
-                // Check immediate win
-                for (let i = 0; i < WIN_MASKS.length; i++) {
-                    if ((playerMask & WIN_MASKS[i]) === WIN_MASKS[i]) {
-                        const move = 8 - Math.log2(WIN_MASKS[i] & ~playerMask);
-                        if (move >= 0 && !gameState[move]) {
-                            self.postMessage(move);
-                            return;
-                        }
-                    }
-                }
-                
-                // Fallback to smart move
-                const move = findSmartMove(gameState, currentPlayer, difficulty);
-                self.postMessage(move);
-            };
-            
-            function findSmartMove(state, player, difficulty) {
-                // AI logic here (optimized)
-                return /* calculated move */;
-            }
-        `;
-        
-        const blob = new Blob([aiWorkerScript], { type: 'application/javascript' });
-        const aiWorker = new Worker(URL.createObjectURL(blob));
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
