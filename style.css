@@ -1,0 +1,316 @@
+:root {
+    --primary-color: #6c5ce7;
+    --secondary-color: #a29bfe;
+    --accent-color: #fd79a8;
+    --light-color: #f8f9fa;
+    --dark-color: #2d3436;
+    --success-color: #00b894;
+    --x-color: #e84393;
+    --o-color: #0984e3;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--dark-color);
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    text-shadow: var(--shadow);
+    animation: fadeIn 0.8s ease;
+}
+
+.title span {
+    color: var(--accent-color);
+    display: inline-block;
+    transform: rotate(0deg);
+    transition: var(--transition);
+}
+
+.title:hover span {
+    transform: rotate(5deg);
+}
+
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.mode-selector {
+    display: flex;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50px;
+    padding: 0.3rem;
+    box-shadow: var(--shadow);
+}
+
+.mode-btn {
+    border: none;
+    background: none;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 400;
+    border-radius: 50px;
+    transition: var(--transition);
+}
+
+.mode-btn.active {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.difficulty-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    box-shadow: var(--shadow);
+}
+
+.difficulty-selector label {
+    font-size: 0.9rem;
+}
+
+.difficulty-selector select {
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+}
+
+.score-board {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.score {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 0.8rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.score.active {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.player-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+}
+
+.x-score .player-icon {
+    color: var(--x-color);
+}
+
+.o-score .player-icon {
+    color: var(--o-color);
+}
+
+.score-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.status-message {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+.game-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    aspect-ratio: 1/1;
+}
+
+.cell {
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.cell:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cell.x {
+    color: var(--x-color);
+}
+
+.cell.o {
+    color: var(--o-color);
+}
+
+.cell.winner {
+    animation: pulse 1s infinite;
+    background: rgba(0, 184, 148, 0.2);
+}
+
+.cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.cell:hover::before {
+    opacity: 1;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.action-btn {
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.action-btn:hover {
+    background: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: var(--accent-color);
+    opacity: 0;
+    animation: confettiFall 5s linear forwards;
+    z-index: 1000;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .cell {
+        font-size: 2rem;
+    }
+}
