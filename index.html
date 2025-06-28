@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyper Ultra Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Hyper Ultra <span>Tic Tac Toe</span></h1>
+        
+        <div class="game-controls">
+            <div class="mode-selector">
+                <button id="pvp-btn" class="mode-btn active">Player vs Player</button>
+                <button id="pvc-btn" class="mode-btn">Player vs Computer</button>
+            </div>
+            <div class="difficulty-selector" id="difficulty-container">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="score-board">
+            <div class="score x-score">
+                <div class="player-icon"><i class="fas fa-times"></i></div>
+                <div class="score-value">0</div>
+            </div>
+            <div class="score ties">
+                <div class="player-icon">Ties</div>
+                <div class="score-value">0</div>
+            </div>
+            <div class="score o-score">
+                <div class="player-icon"><i class="far fa-circle"></i></div>
+                <div class="score-value">0</div>
+            </div>
+        </div>
+        
+        <div class="status-message" id="status">X's turn</div>
+        
+        <div class="game-container">
+            <div class="main-grid" id="main-grid"></div>
+        </div>
+        
+        <div class="action-buttons">
+            <button id="restart-btn" class="action-btn"><i class="fas fa-redo"></i> Restart</button>
+            <button id="new-game-btn" class="action-btn"><i class="fas fa-plus-circle"></i> New Game</button>
+        </div>
+    </div>
+    
+    <div class="confetti-container" id="confetti-container"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
