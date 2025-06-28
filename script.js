@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (boardWinner) {
                 cell.classList.add(boardWinner.toLowerCase());
                 cell.innerHTML = boardWinner === 'X' ? '<i class="fas fa-times"></i>' : '<i class="far fa-circle"></i>';
+                mainGrid.appendChild(cell);
                 continue;
             }
             
@@ -66,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isBoardFull(gameState.board[i])) {
                 cell.textContent = 'T';
                 cell.style.color = '#636e72';
+                mainGrid.appendChild(cell);
                 continue;
             }
             
@@ -126,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const subBoardWinner = checkWinner(gameState.board[boardIndex]);
         
         // Determine next active board
-        gameState.activeBoard = isBoardFull(gameState.board[cellIndex]) || checkWinner(gameState.board[cellIndex]) ? null : cellIndex;
+        gameState.activeBoard = (isBoardFull(gameState.board[cellIndex]) || checkWinner(gameState.board[cellIndex])) ? null : cellIndex;
         
         // Switch player
         gameState.currentPlayer = gameState.currentPlayer === 'X' ? 'O' : 'X';
@@ -145,7 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
             gameState.gameOver = true;
             if (overallWinner !== 'tie') {
                 gameState.scores[overallWinner]++;
-                showConfetti();
+                if (overallWinner === 'X' || gameState.gameMode === 'pvp') {
+                    showConfetti();
+                }
                 statusMessage.textContent = `${overallWinner} wins the game!`;
             } else {
                 gameState.scores.ties++;
@@ -169,7 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (gameState.difficulty === 'easy') {
             // Easy: random moves
-            [boardIndex, cellIndex] = getRandomMove();
+            const move = getRandomMove();
+            boardIndex = move.boardIndex;
+            cellIndex = move.cellIndex;
         } else if (gameState.difficulty === 'medium') {
             // Medium: sometimes blocks or wins if obvious
             const move = getSmartMove();
@@ -189,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const subBoardWinner = checkWinner(gameState.board[boardIndex]);
         
         // Determine next active board
-        gameState.activeBoard = isBoardFull(gameState.board[cellIndex]) || checkWinner(gameState.board[cellIndex]) ? null : cellIndex;
+        gameState.activeBoard = (isBoardFull(gameState.board[cellIndex]) || checkWinner(gameState.board[cellIndex])) ? null : cellIndex;
         
         // Switch player
         gameState.currentPlayer = 'X';
@@ -251,8 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Select a random move
-        const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
-        return [randomMove.boardIndex, randomMove.cellIndex];
+        return validMoves[Math.floor(Math.random() * validMoves.length)];
     }
 
     // Get a smart move (looks for immediate wins/blocks)
@@ -295,8 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // If no immediate wins/blocks, return a random move
-        const [boardIndex, cellIndex] = getRandomMove();
-        return { boardIndex, cellIndex };
+        return getRandomMove();
     }
 
     // Get a strategic move (more advanced logic)
@@ -329,8 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Fall back to random move
-        const [boardIndex, cellIndex] = getRandomMove();
-        return { boardIndex, cellIndex };
+        return getRandomMove();
     }
 
     // Check for winner in a 3x3 board
@@ -406,13 +409,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear any existing confetti
         confettiContainer.innerHTML = '';
         
-        // Create 50 confetti pieces
-        for (let i = 0; i < 50; i++) {
+        // Create 100 confetti pieces
+        for (let i = 0; i < 100; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
             
             // Random properties
-            const size = Math.random() * 10 + 5;
+            const size = Math.random() * 12 + 5;
             const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
             const left = Math.random() * 100;
             const animationDuration = Math.random() * 3 + 2;
